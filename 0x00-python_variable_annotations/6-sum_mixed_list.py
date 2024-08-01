@@ -11,7 +11,7 @@ def sum_mixed_list(mxd_lst: list[int | float]) -> float:
     takes a list mxd_lst of integers and floats and returns
     their sum as a float.
     """
-    x = 0.0
+    x: float = 0.0
     for val in mxd_lst:
         x += val
     return x
