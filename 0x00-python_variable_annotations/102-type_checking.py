@@ -2,10 +2,10 @@
 """
 Use mypy to validate piece of code and apply any necessary changes.
 """
-from typing import Tuple, Any
+from typing import Tuple, Any, List
 
 
-def zoom_array(lst: Tuple, factor: int = 2) -> list[Any]:
+def zoom_array(lst: Tuple, factor: int = 2) -> List[Any]:
     """
     annotate this function that was given
     """
