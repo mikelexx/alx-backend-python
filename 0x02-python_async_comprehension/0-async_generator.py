@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """
 Write a coroutine called async_generator that takes no arguments.
 
