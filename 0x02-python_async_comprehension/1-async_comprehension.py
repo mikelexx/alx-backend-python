@@ -20,5 +20,4 @@ comprehensing over async_generator, then return the 10
 random numbers.
     """
     results = [number async for number in async_generator()]
-    print(results)
     return results
