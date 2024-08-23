@@ -29,7 +29,7 @@ class TestGithubOrgClient(unittest.TestCase):
             client.ORG_URL.format(org=org_name))
 
     @parameterized.expand([('google', ), ('abc')])
-    def test_public_repos_url(self, org_name):
+    def test_public_repos_url(self, org_name) -> None:
         """
         test public_repos_url method returns correct values
         """
