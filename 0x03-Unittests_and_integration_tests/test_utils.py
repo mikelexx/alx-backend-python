@@ -2,6 +2,7 @@
 """
 Contains unittests for access_nested_map function
 """
+
 import unittest
 import requests
 from typing import Any, Callable
