@@ -4,7 +4,7 @@ contains tests for client.py class methods
 """
 
 import unittest
-from unittest.mock import Mock, patch
+from unittest.mock import PropertyMock, patch
 from parameterized import parameterized
 from utils import get_json, access_nested_map, memoize
 from client import GithubOrgClient
@@ -27,3 +27,14 @@ class TestGithubOrgClient(unittest.TestCase):
 
         mock_get_json.assert_called_once_with(
             client.ORG_URL.format(org=org_name))
+
+    @parameterized.expand([('google', ), ('abc')])
+    def test_public_repos_url(self, org_name):
+        """
+        test public_repos_url method returns correct values
+        """
+        client = GithubOrgClient(org_name)
+        with patch('client.GithubOrgClient.org',
+                   new_callable=PropertyMock) as mock_org:
+            mock_org.return_value = {'repos_url': 'randomUrl'}
+            self.assertEqual(client._public_repos_url, 'randomUrl')
