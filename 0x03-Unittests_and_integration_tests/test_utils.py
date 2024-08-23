@@ -2,7 +2,7 @@
 """
 Contains unittests for access_nested_map function
 """
-from typing import Any
+from typing import Any, Callable
 import unittest
 import requests
 from parameterized import parameterized
@@ -89,14 +89,14 @@ class TestMemoize(unittest.TestCase):
             simple class with which to test memoization with its attributes
             """
 
-            def a_method(self):
+            def a_method(self) -> int:
                 """
                 simple function to simulate expensive function
                 """
                 return 42
 
             @memoize
-            def a_property(self):
+            def a_property(self) -> int:
                 """
                 memoized result of a_method to be acessed as property
                 """
