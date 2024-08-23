@@ -79,7 +79,7 @@ class TestMemoize(unittest.TestCase):
     implements tests for memoizing functions
     """
 
-    def test_memoize(self):
+    def test_memoize(self) -> None:
         """
         Tests the memoize decorator caches the results of function
         """
