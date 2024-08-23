@@ -78,33 +78,23 @@ class TestMemoize(unittest.TestCase):
     """
     implements tests for memoizing functions
     """
-
     def test_memoize(self) -> None:
         """
         Tests the memoize decorator caches the results of function
         """
 
         class TestClass:
-            """
-            simple class with which to test memoization with its attributes
-            """
 
-            def a_method(self) -> int:
-                """
-                simple function to simulate expensive function
-                """
+            def a_method(self):
                 return 42
 
             @memoize
-            def a_property(self) -> int:
-                """
-                memoized result of a_method to be acessed as property
-                """
+            def a_property(self): 
                 return self.a_method()
 
         inst = TestClass()
         with patch.object(inst, 'a_method') as mock_a_method:
-            mock_a_method.return_value = 42
+            mock_a_method.return_value = 42 
             self.assertEqual(inst.a_property, 42)
             self.assertEqual(inst.a_property, 42)
             mock_a_method.assert_called_once()
