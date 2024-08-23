@@ -2,6 +2,7 @@
 """
 contains tests for client.py class methods
 """
+
 import unittest
 from unittest.mock import Mock, patch
 from parameterized import parameterized
