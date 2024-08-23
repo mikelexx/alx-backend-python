@@ -4,8 +4,11 @@ Contains unittests for access_nested_map function
 """
 from typing import Any
 import unittest
+import requests
 from parameterized import parameterized
+from unittest.mock import Mock, patch
 
+get_json = __import__('utils').get_json
 access_nested_map = __import__('utils').access_nested_map
 
 
@@ -44,3 +47,27 @@ class TestAccessNestedMap(unittest.TestCase):
         with self.assertRaises(KeyError) as error:
             access_nested_map(nested_map, path)
         self.assertEqual(str(error.exception), f"'{expected_val}'")
+
+
+class TestGetJson(unittest.TestCase):
+    """
+    test mocking http/function calls and their returns
+    """
+
+    @parameterized.expand([("http://example.com", {
+        "payload": True
+    }), ("http://holberton.io", {
+        "payload": False
+    })])
+    @patch('requests.get')
+    def test_get_json(self, test_url, test_payload, mock_requests_get) -> None:
+        """
+        testing that mock function replaces an exensice http call function in
+        get_json function
+        """
+        mock_response = Mock()
+
+        mock_response.json.return_value = test_payload
+        mock_requests_get.return_value = mock_response
+        self.assertEqual(get_json(test_url), test_payload)
+        mock_requests_get.assert_called_once_with(test_url)
