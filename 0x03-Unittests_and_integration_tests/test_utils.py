@@ -2,9 +2,9 @@
 """
 Contains unittests for access_nested_map function
 """
-from typing import Any, Callable
 import unittest
 import requests
+from typing import Any, Callable
 from parameterized import parameterized
 from unittest.mock import Mock, _patch, patch
 
