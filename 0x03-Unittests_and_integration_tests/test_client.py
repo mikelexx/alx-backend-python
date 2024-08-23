@@ -17,7 +17,7 @@ class TestGithubOrgClient(unittest.TestCase):
 
     @parameterized.expand([('google', ), ('abc', )])
     @patch('client.get_json')
-    def test_org(self, org_name, mock_get_json):
+    def test_org(self, org_name, mock_get_json) -> None:
         """
         tests the GithubOrgClient.org method
         returns correct value
@@ -27,5 +27,3 @@ class TestGithubOrgClient(unittest.TestCase):
 
         mock_get_json.assert_called_once_with(
             client.ORG_URL.format(org=org_name))
-    
-    def test_public_repos_url(self):
