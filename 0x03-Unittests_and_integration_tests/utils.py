@@ -68,6 +68,12 @@ def memoize(fn: Callable) -> Callable:
     42
     >>> my_object.a_method
     42
+    memoize wras the fn using memoized wich will be called in its stead to
+    do stuff before/after calling original function. However this wrapper
+    is converted to a property so that it will be accessed as an attribute
+    normally when you decorate a function, the decorator return value is what 
+    will be called (in this case memoized which is wrapps original function)
+    and is an attribute so that it will be accessed always from only an instance
     """
     attr_name = "_{}".format(fn.__name__)
 
@@ -77,5 +83,4 @@ def memoize(fn: Callable) -> Callable:
         if not hasattr(self, attr_name):
             setattr(self, attr_name, fn(self))
         return getattr(self, attr_name)
-
     return property(memoized)
