@@ -7,10 +7,7 @@ import requests
 from typing import Any, Callable
 from parameterized import parameterized
 from unittest.mock import Mock, _patch, patch
-
-get_json = __import__('utils').get_json
-access_nested_map = __import__('utils').access_nested_map
-memoize = __import__('utils').memoize
+from utils import access_nested_map, get_json, memoize
 
 
 class TestAccessNestedMap(unittest.TestCase):
