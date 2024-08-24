@@ -67,12 +67,19 @@ class TestGithubOrgClient(unittest.TestCase):
             mock_get_json.assert_called_once_with('urlforgoogle')
             mock_public_repos_url.assert_called_once()
 
-    @parameterized.expand([
-        ({"license": {"key": "my_license"}}, "my_license", True),
-        ({"license": {"key": "other_license"}}, "my_license", False)
-        ])
+    @parameterized.expand([({
+        "license": {
+            "key": "my_license"
+        }
+    }, "my_license", True),
+                           ({
+                               "license": {
+                                   "key": "other_license"
+                               }
+                           }, "my_license", False)])
     def test_has_license(self, repo, license_key, expected_val):
         """
         unit-test GithubOrgClient.has_license method
         """
-        self.assertIs(GithubOrgClient.has_license(repo, license_key), expected_val)
+        self.assertIs(GithubOrgClient.has_license(repo, license_key),
+                      expected_val)
