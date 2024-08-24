@@ -38,3 +38,31 @@ class TestGithubOrgClient(unittest.TestCase):
                    new_callable=PropertyMock) as mock_org:
             mock_org.return_value = {'repos_url': 'randomUrl'}
             self.assertEqual(client._public_repos_url, 'randomUrl')
+
+    @patch('client.get_json')
+    def test_public_repos(self, mock_get_json) -> None:
+        """
+        unit-testing GithubOrgClient.public_repos
+        """
+        mock_get_json.return_value = [{
+            'name': 'libcxx',
+            'license': {
+                'key': 'MIT'
+            }
+        }, {
+            'name': 'CSP-Validator',
+            'license': {
+                'expire': '2026'
+            }
+        }, {
+            'name': 'autoparse'
+        }]
+        with patch('client.GithubOrgClient._public_repos_url',
+                   new_callable=PropertyMock) as mock_public_repos_url:
+            mock_public_repos_url.return_value = 'urlforgoogle'
+            client = GithubOrgClient('google')
+            self.assertEqual(client.public_repos(),
+                             ['libcxx', 'CSP-Validator', 'autoparse'])
+            self.assertEqual(client.public_repos('MIT'), ['libcxx'])
+            mock_get_json.assert_called_once_with('urlforgoogle')
+            mock_public_repos_url.assert_called_once()
