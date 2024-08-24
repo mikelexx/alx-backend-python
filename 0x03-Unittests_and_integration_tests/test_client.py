@@ -118,13 +118,13 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
             """
             mock = Mock()
             if url == cls.org_payload['repos_url']:
-                mock.json = cls.repos_payload
+                mock.json = lambda: cls.repos_payload
                 return mock
-            mock.json = {}
+            mock.json = lambda: {}
             return mock
 
-        self.get_patcher.side_effect = side_effect
-        self.get_patcher.start()
+        cls.get_patcher.side_effect = side_effect
+        cls.mock_requests_get = cls.get_patcher.start()
 
     @classmethod
     def tearDownClass(cls) -> None:
