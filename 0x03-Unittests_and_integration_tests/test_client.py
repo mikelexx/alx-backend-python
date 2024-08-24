@@ -4,10 +4,12 @@ contains tests for client.py class methods
 """
 
 import unittest
-from unittest.mock import PropertyMock, patch
-from parameterized import parameterized
+import requests
+from unittest.mock import PropertyMock, patch, Mock
+from parameterized import parameterized, parameterized_class
 from utils import get_json, access_nested_map, memoize
 from client import GithubOrgClient
+from fixtures import TEST_PAYLOAD
 
 
 class TestGithubOrgClient(unittest.TestCase):
@@ -83,3 +85,50 @@ class TestGithubOrgClient(unittest.TestCase):
         """
         self.assertIs(GithubOrgClient.has_license(repo, license_key),
                       expected_val)
+
+
+org_payload, repos_payload, expected_repos, apache2_repos = TEST_PAYLOAD[0]
+
+
+@parameterized_class([{
+    'org_payload': org_payload,
+    'repos_payload': repos_payload,
+    'expected_repos': expected_repos,
+    'apache2_repos': apache2_repos
+}])
+class TestIntegrationGithubOrgClient(unittest.TestCase):
+    """
+    mocking and parameterizing with fixtures
+    """
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        """
+        mock request.get to return example payloads found in
+        fixtures
+        """
+        cls.get_patcher = patch('requests.get')
+
+        def side_effect(url):
+            """
+            to make sure the mock of requests.get(url).json()
+            returns the correct
+            fixtures for the
+            various values of url that you anticipated to be received
+            """
+            mock = Mock()
+            if url == cls.org_payload['repos_url']:
+                mock.json = cls.repos_payload
+                return mock
+            mock.json = {}
+            return mock
+
+        self.get_patcher.side_effect = side_effect
+        self.get_patcher.start()
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        """
+        for stoping the patcher
+        """
+        cls.get_patcher.stop()
