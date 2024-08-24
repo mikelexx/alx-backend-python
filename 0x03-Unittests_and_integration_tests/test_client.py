@@ -106,6 +106,8 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         """
         mock request.get to return example payloads found in
         fixtures
+        get_patcher just creates a pactch object that can be
+        started and stoped to replace target with mock object(start)
         """
         cls.get_patcher = patch('requests.get')
 
@@ -114,7 +116,11 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
             to make sure the mock of requests.get(url).json()
             returns the correct
             fixtures for the
-            various values of url that you anticipated to be received
+            various values of url that you anticipated to be
+            received
+            side_effect are used in stead of return value for
+            raising exceptions or returning dynamic values (return values
+            )
             """
             mock = Mock()
             if url == cls.org_payload['repos_url']:
@@ -123,8 +129,8 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
             mock.json = lambda: {}
             return mock
 
-        cls.get_patcher.side_effect = side_effect
         cls.mock_requests_get = cls.get_patcher.start()
+        cls.mock_requests_get.side_effect = side_effect
 
     @classmethod
     def tearDownClass(cls) -> None:
