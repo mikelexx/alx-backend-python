@@ -131,7 +131,7 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
                 mock.json = lambda: {}
             return mock
 
-        cls.get_patcher = patch('requests.get')
+        cls.get_patcher = patch('utils.requests.get')
         cls.mock_requests_get = cls.get_patcher.start()
         cls.mock_requests_get.side_effect = side_effect
 
