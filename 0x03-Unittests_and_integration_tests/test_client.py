@@ -125,8 +125,10 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
             mock = Mock()
             if url == cls.org_payload['repos_url']:
                 mock.json = lambda: cls.repos_payload
-                return mock
-            mock.json = lambda: {}
+            elif url == 'https://api.github.com/orgs/google':
+                mock.json = lambda: cls.org_payload
+            else:
+                mock.json = lambda: {}
             return mock
 
         cls.mock_requests_get = cls.get_patcher.start()
