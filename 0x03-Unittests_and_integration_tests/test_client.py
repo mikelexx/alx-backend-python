@@ -102,6 +102,29 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
     """
 
     @classmethod
+    def side_effect(url):
+        """
+        to make sure the mock of requests.get(url).json()
+        returns the correct
+        fixtures for the
+        various values of url that you anticipated to be
+        received
+        side_effect are used in stead of return value for
+        raising exceptions or returning dynamic values (return values
+        )
+        """
+
+        mock = Mock()
+        if url == cls.org_payload['repos_url']:
+            mock.json = lambda: cls.repos_payload
+
+        elif url == 'https://api.github.com/orgs/google':
+            mock.json = lambda: cls.org_payload
+        else:
+            mock.json = lambda: {}
+        return mock
+
+    @classmethod
     def setUpClass(cls) -> None:
         """
         mock request.get to return example payloads found in
@@ -110,29 +133,7 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         started and stoped to replace target with mock object(start)
         """
 
-        def side_effect(url):
-            """
-            to make sure the mock of requests.get(url).json()
-            returns the correct
-            fixtures for the
-            various values of url that you anticipated to be
-            received
-            side_effect are used in stead of return value for
-            raising exceptions or returning dynamic values (return values
-            )
-            """
-
-            mock = Mock()
-            if url == cls.org_payload['repos_url']:
-                mock.json = lambda: cls.repos_payload
-
-            elif url == 'https://api.github.com/orgs/google':
-                mock.json = lambda: cls.org_payload
-            else:
-                mock.json = lambda: {}
-            return mock
-
-        cls.get_patcher = patch('requests.get', side_effect=side_effect)
+        cls.get_patcher = patch('requests.get', side_effect=cls.side_effect)
         cls.get_patcher.start()
 
     @classmethod
