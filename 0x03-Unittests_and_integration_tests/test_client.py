@@ -102,7 +102,7 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
     """
 
     @classmethod
-    def side_effect(url):
+    def side_effect(cls, url):
         """
         to make sure the mock of requests.get(url).json()
         returns the correct
@@ -134,6 +134,7 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         """
 
         cls.get_patcher = patch('requests.get', side_effect=cls.side_effect)
+        cls.client = GithubOrgClient('google')
         cls.get_patcher.start()
 
     @classmethod
@@ -142,3 +143,16 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         for stoping the patcher
         """
         cls.get_patcher.stop()
+
+    def test_public_repos(self) -> None:
+        """
+        test GithubOrgClient.public_repos
+        """
+        self.assertEqual(self.client.public_repos(), self.expected_repos)
+
+    def test_public_repos_with_license(self) -> None:
+        """
+           testing with license for apache
+        """
+        self.assertEqual(self.client.public_repos(license='apache-2.0'),
+                         self.apache2_repos)
