@@ -109,7 +109,6 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         get_patcher just creates a pactch object that can be
         started and stoped to replace target with mock object(start)
         """
-        cls.get_patcher = patch('requests.get')
 
         def side_effect(url):
             """
@@ -122,6 +121,7 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
             raising exceptions or returning dynamic values (return values
             )
             """
+
             mock = Mock()
             if url == cls.org_payload['repos_url']:
                 mock.json = lambda: cls.repos_payload
@@ -131,6 +131,7 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
                 mock.json = lambda: {}
             return mock
 
+        cls.get_patcher = patch('requests.get')
         cls.mock_requests_get = cls.get_patcher.start()
         cls.mock_requests_get.side_effect = side_effect
 
