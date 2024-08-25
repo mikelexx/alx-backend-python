@@ -125,15 +125,15 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
             mock = Mock()
             if url == cls.org_payload['repos_url']:
                 mock.json = lambda: cls.repos_payload
-        #   elif url == 'https://api.github.com/orgs/google':
-        #       mock.json = lambda: cls.org_payload
-        #   else:
-        #       mock.json = lambda: {}
+
+            elif url == 'https://api.github.com/orgs/google':
+                mock.json = lambda: cls.org_payload
+            else:
+                mock.json = lambda: {}
             return mock
 
-        cls.get_patcher = patch('requests.get')
-        cls.mock_requests_get = cls.get_patcher.start()
-        cls.mock_requests_get.side_effect = side_effect
+        cls.get_patcher = patch('requests.get', side_effect=side_effect)
+        cls.get_patcher.start()
 
     @classmethod
     def tearDownClass(cls) -> None:
